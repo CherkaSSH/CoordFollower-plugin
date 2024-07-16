@@ -15,7 +15,7 @@ public class CoordFollowerModule extends Module {
         super("CoordFollower", ModuleCategory.MISC);
     }
     @Subscribe
-    public onUpdate(EventPlayerUpdate event){
+    public void onUpdate(EventPlayerUpdate event){
     }
     public static Path getCoordsDirectory() {
         Path path = RusherHackAPI.getConfigPath().getParent().resolve("coords");
