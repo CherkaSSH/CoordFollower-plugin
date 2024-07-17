@@ -3,10 +3,6 @@ package org.look.at;
 import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.plugin.Plugin;
 
-import java.nio.file.Path;
-
-import static org.look.at.CoordFollowerModule.getCoordsDirectory;
-
 public class CoordFollower extends Plugin {
 
     @Override

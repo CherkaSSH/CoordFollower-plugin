@@ -1,6 +1,5 @@
 package org.look.at;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 
@@ -27,17 +26,8 @@ public class Coordinates {
     public int getX() {return x;}
     public int getZ() {return z;}
     public dim getCurdim() {return curdim;}
-    public void rotate(){
-        double deltaX = this.x - player.getX();
-        double deltaZ = this.z - player.getZ();
-        double yaw = Math.atan2(deltaZ, deltaX);
-        yaw = Math.toDegrees(yaw);
-        yaw -= 90;
-        player.setYRot((float) yaw);
-    }
     private final int z,x;
     private dim curdim;
-    private Player player = Minecraft.getInstance().player;
     public enum dim {
         over,nether
     }

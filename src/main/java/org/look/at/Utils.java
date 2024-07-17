@@ -1,5 +1,8 @@
 package org.look.at;
 
+import net.minecraft.world.entity.player.Player;
+import org.rusherhack.client.api.RusherHackAPI;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -12,7 +15,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 
-import static org.look.at.CoordFollowerModule.getCoordsDirectory;
 
 public class Utils {
     private static final String ALGORITHM = "Blowfish";
@@ -38,6 +40,15 @@ public class Utils {
             in.close();
             fileIn.close();
             return encryption.decrypt(encrypted, password);
+        }
+        public static Path getCoordsDirectory() {
+            Path path = RusherHackAPI.getConfigPath().getParent().resolve("coords");
+            if (!Files.exists(path)) {
+                try {Files.createDirectories(path);}
+                catch (IOException e)
+                {throw new RuntimeException("Failed to create coords directory", e);}
+            }
+            return path;
         }
     }
     public static class encryption {
@@ -66,6 +77,28 @@ public class Utils {
             KeySpec spec = new PBEKeySpec(password.toCharArray());
             SecretKey tmp = factory.generateSecret(spec);
             return new SecretKeySpec(tmp.getEncoded(), ALGORITHM);
+        }
+    }
+    public static class math {
+        public double getXZDistanceToBlock(Player player, Coordinates coords) {
+            double playerX = player.getX();
+            double playerZ = player.getZ();
+            double blockX = coords.getX();
+            double blockZ = coords.getZ();
+
+            double deltaX = blockX - playerX;
+            double deltaZ = blockZ - playerZ;
+
+            return Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
+        }
+
+        public float rotateX(Player player,Coordinates coord){
+            double deltaX = coord.getX() - player.getX();
+            double deltaZ = coord.getZ() - player.getZ();
+            double yaw = Math.atan2(deltaZ, deltaX);
+            yaw = Math.toDegrees(yaw);
+            return (float) (yaw -= 90);
+
         }
     }
 }
