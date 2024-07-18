@@ -1,4 +1,4 @@
-package org.look.at;
+package org.look.at.important;
 
 import net.minecraft.world.entity.player.Player;
 import org.rusherhack.client.api.RusherHackAPI;
@@ -22,7 +22,7 @@ public class Utils {
 
     public class fileUtils {
         public static void save(Object obj, String password, String filename) throws Exception {
-            byte[] encrypted = encryption.encrypt(obj, password);
+            byte[] encrypted = encryptionUtils.encrypt(obj, password);
             Path path = getCoordsDirectory().resolve(filename);
             Files.createDirectories(path.getParent());
             FileOutputStream fileOut = new FileOutputStream(path.toFile());
@@ -39,7 +39,7 @@ public class Utils {
             byte[] encrypted = (byte[]) in.readObject();
             in.close();
             fileIn.close();
-            return encryption.decrypt(encrypted, password);
+            return encryptionUtils.decrypt(encrypted, password);
         }
         public static Path getCoordsDirectory() {
             Path path = RusherHackAPI.getConfigPath().getParent().resolve("coords");
@@ -51,7 +51,7 @@ public class Utils {
             return path;
         }
     }
-    public static class encryption {
+    public class encryptionUtils {
         public static byte[] encrypt(Object obj, String password) throws Exception {
             ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
             ObjectOutputStream out = new ObjectOutputStream(byteOut);
@@ -79,7 +79,7 @@ public class Utils {
             return new SecretKeySpec(tmp.getEncoded(), ALGORITHM);
         }
     }
-    public static class math {
+    public class mathUtils {
         public double getXZDistanceToBlock(Player player, Coordinates coords) {
             double playerX = player.getX();
             double playerZ = player.getZ();
@@ -92,13 +92,12 @@ public class Utils {
             return Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
         }
 
-        public float rotateX(Player player,Coordinates coord){
+        public float rotateXFloat(Player player,Coordinates coord){
             double deltaX = coord.getX() - player.getX();
             double deltaZ = coord.getZ() - player.getZ();
             double yaw = Math.atan2(deltaZ, deltaX);
             yaw = Math.toDegrees(yaw);
             return (float) (yaw -= 90);
-
         }
     }
 }

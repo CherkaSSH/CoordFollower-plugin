@@ -1,10 +1,9 @@
-package org.look.at;
+package org.look.at.important;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.player.Player;
 
 public class Coordinates {
-    public Coordinates(int x,int z){
+    public Coordinates(int x, int z){
         this.x=x;
         this.z=z;
     }
