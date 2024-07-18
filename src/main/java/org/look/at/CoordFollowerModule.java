@@ -3,10 +3,11 @@ package org.look.at;
 import net.minecraft.world.entity.player.Player;
 import org.look.at.important.Coordinates;
 import org.look.at.important.Utils;
+import org.rusherhack.client.api.RusherHackAPI;
 import org.rusherhack.client.api.events.player.EventPlayerUpdate;
 import org.rusherhack.client.api.feature.command.ModuleCommand;
-import org.rusherhack.client.api.feature.module.Module;
 import org.rusherhack.client.api.feature.module.ModuleCategory;
+import org.rusherhack.client.api.feature.module.ToggleableModule;
 import org.rusherhack.core.command.annotations.CommandExecutor;
 import org.rusherhack.core.event.subscribe.Subscribe;
 
@@ -14,13 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CoordFollowerModule extends Module {
+public class CoordFollowerModule extends ToggleableModule {
     public CoordFollowerModule() {super("CoordFollower", ModuleCategory.MISC);}
 
     private int index = 0;
-    List<Coordinates> coordinates= new ArrayList<>();
+    private List<Coordinates> coordinates= new ArrayList<>();
     Utils.mathUtils mathUtils;
     Utils.fileUtils fileUtils;
+    ToggleableModule autowalk = (ToggleableModule) RusherHackAPI.getModuleManager().getFeature("AutoWalk").get();
 
     @Subscribe
     void onUpdate(EventPlayerUpdate event){
@@ -28,7 +30,23 @@ public class CoordFollowerModule extends Module {
         {
             player().setXRot(mathUtils.rotateXFloat(player(),coordinates.get(index)));
         }
-        if (mathUtils.getXZDistanceToBlock(player(),coordinates.get(index))<10&&coordinates.size()>index) {index++;}
+        if (mathUtils.getXZDistanceToBlock(player(),coordinates.get(index))<10&&coordinates.size()>index)
+        {
+            index++;
+        }
+    }
+    @Override
+    public void onEnable(){
+        if(!coordinates.isEmpty()){
+            autowalk.setToggled(true);
+        }
+    }
+
+    @Override
+    public void onDisable(){
+        if(!coordinates.isEmpty()){
+            autowalk.setToggled(true);
+        }
     }
 
     public Player player() {
@@ -81,7 +99,7 @@ public class CoordFollowerModule extends Module {
             @CommandExecutor(subCommand = "load")
             @CommandExecutor.Argument({"name","pass"})
             private void load(String name,String pass) throws Exception {
-                coordinates = (List<Coordinates>) Utils.fileUtils.load(pass,name+".coords");
+                coordinates = (List<Coordinates>) fileUtils.load(pass,name+".coords");
             }
         };
     }
