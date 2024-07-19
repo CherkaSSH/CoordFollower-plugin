@@ -10,6 +10,7 @@ import org.rusherhack.client.api.feature.module.ModuleCategory;
 import org.rusherhack.client.api.feature.module.ToggleableModule;
 import org.rusherhack.core.command.annotations.CommandExecutor;
 import org.rusherhack.core.event.subscribe.Subscribe;
+import org.rusherhack.core.setting.BooleanSetting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.Optional;
 
 public class CoordFollowerModule extends ToggleableModule {
     public CoordFollowerModule() {super("CoordFollower", ModuleCategory.MISC);}
-
+    public BooleanSetting aw = new BooleanSetting("AutoWalk",true);
     private int index = 0;
     private List<Coordinates> coordinates= new ArrayList<>();
     Utils.mathUtils mathUtils;
@@ -41,15 +42,15 @@ public class CoordFollowerModule extends ToggleableModule {
     }
     @Override
     public void onEnable(){
-        if(!coordinates.isEmpty()){
-            autowalk.setToggled(true);
+        if(!coordinates.isEmpty()&&aw.getValue()){
+            autowalk.setToggled(this.isToggled());
         }
     }
 
     @Override
     public void onDisable(){
         if(!coordinates.isEmpty()){
-            autowalk.setToggled(true);
+            autowalk.setToggled(this.isToggled());
         }
     }
 
