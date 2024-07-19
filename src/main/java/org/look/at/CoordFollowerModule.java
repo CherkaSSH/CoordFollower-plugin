@@ -34,6 +34,10 @@ public class CoordFollowerModule extends ToggleableModule {
         {
             index++;
         }
+        else
+        {
+            this.setToggled(false);
+        }
     }
     @Override
     public void onEnable(){
